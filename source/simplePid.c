@@ -1,77 +1,51 @@
-/*
- * simplePid.c
- *
- * Created: 16/10/2014 19:54:38
- *  Author: felipe.neves
- */ 
+#include <simplePID.h>
 
-#include "simplePID.h"
+int PidControllerInit(PidController *pid, PidNewCoefficients *coeff) {
+	if(!pid)
+		return -1;
 
-/*
- *	Variaveis desse modulo:
- */
+	if(!coeff) 
+		return -1;
+	
+	//Make a IIR Z-trans filter from PID parameters:
+	pid->bn[0] = (coeff->new_kp + coeff->new_ki + coeff->new_kd); 
+	pid->bn[1] = (coeff->new_kp + coeff->new_ki) - (coeff->new_kd + coeff->new_kd);
+	pid->bn[2] = coeff->new_kd;
 
-PidCtl_t PidTbl[NUMBER_OF_PID_CONTROLLLERS]; //Tabela de blocos de controle PID
-uint8_t  freePid = 0;						 //Numero de pids usados
+	pid->next_xn = 0;
+	pid->next_yn = 0;
 
-/*
- * PidCreate()
- */
-Handler_t PidCreate(iq8_t kp, iq8_t ki, iq8_t kd)
-{	
-	//checa se tem estrutura disponivel:
-	if(freePid >= NUMBER_OF_PID_CONTROLLLERS)
-	{
-		return(0);		
-	}
-	
-	//Inicializa bloco de controle livre:
-	PidTbl[freePid].kd = kd;
-	PidTbl[freePid].ki = ki;
-	PidTbl[freePid].kp = kp;
-	
-	//Seta os coeficientes:
-	PidTbl[freePid].coefSet[0] = kp+ki+kd;
-	PidTbl[freePid].coefSet[1] = kp+ki-(kd + kd);
-	PidTbl[freePid].coefSet[2] = kd;
-	
-	//Limpa todos os states:
-	PidTbl[freePid].inputState[0] = 0;
-	PidTbl[freePid].inputState[1] = 0;
-	PidTbl[freePid].inputState[2] = 0;
-	PidTbl[freePid].inputState[3] = 0;
+	pid->xn[0] = 0; 
+	pid->xn[1] = 0; 
+	pid->xn[2] = 0; 
+	pid->xn[3] = 0; 
 
-	PidTbl[freePid].outputState[0] = 0;
-	PidTbl[freePid].outputState[1] = 0;
-	PidTbl[freePid].outputState[2] = 0;
-	PidTbl[freePid].outputState[3] = 0;
-	
-	PidTbl[freePid].inputPtr  = 0;
-	PidTbl[freePid].outputPtr = 0;
-	
-	freePid++;
-	
-	//Retorna em forma de handler:
-	return((Handler_t) &PidTbl[freePid-1]);
-	
+	pid->yn[0] = 0; 
+	pid->yn[1] = 0; 
+	pid->yn[2] = 0; 
+
+	return 0;
 }
 
-/*
- * PidTune()
- */
-void PidTune(Handler_t h, iq8_t kp, iq8_t ki, iq8_t kd)
-{
-	PidCtlPtr_t ptr = (PidCtlPtr_t)h;
-	
-	//checa se é valido:
-	if(h == 0x0000) return;
-	
-	//ajusta coeficientes:
-	ptr->kd = kd;
-	ptr->ki = ki;
-	ptr->kp = kp;
-	
-	ptr->coefSet[0] = kp+ki+kd;
-	ptr->coefSet[1] = kp+ki-(kd + kd);
-	ptr->coefSet[2] = kd;	
+int PidControllerTune(PidController *pid, PidNewCoefficients *coeff) {
+	if(!pid)
+		return -1;
+
+	if(!coeff) 
+		return -1;
+
+	pid->bn[0] = (coeff->new_kp + coeff->new_ki + coeff->new_kd); 
+	pid->bn[1] = (coeff->new_kp + coeff->new_ki) - (coeff->new_kd + coeff->new_kd);
+	pid->bn[2] = coeff->new_kd;
+
+	pid->xn[0] = 0; 
+	pid->xn[1] = 0; 
+	pid->xn[2] = 0; 
+	pid->xn[3] = 0; 
+
+	pid->yn[0] = 0; 
+	pid->yn[1] = 0; 
+	pid->yn[2] = 0; 
+
+	return 0;
 }
