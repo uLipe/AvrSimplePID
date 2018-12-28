@@ -22,5 +22,16 @@ AVR specialized math instructions.
 - where mmcu is the ISA you want to compile supported by avr-gcc;  
 - on the build folder you'll find a .a file pĺus .h file, include it on your project and enjoy;
 
+# Example
+ Inside of example folder you will find a code which can be used as starting point of your 
+ PID control project, it also serves as tutorial on how to use a built library.
+ You can also build this file into a flashable hex file by typing inside a terminal:
+
+ ```
+ $ make all MCU=<mmcu> 
+ ```
+- where mmcu is the ISA you want to compile supported by avr-gcc;  
+- on the build folder you'll find a .hex file ready to be flashed;
+
 # Support:
  - If you want some help with this work contact me: ryukokki.felipe@gmail.com

@@ -1,6 +1,3 @@
- #define MASK		0x03
- #define FILTER_LEN 0x03
-
 				.global  PidControllerUpdate
 				.section .text
 
@@ -28,10 +25,10 @@ PidControllerUpdate:
 			sub	  r22, r20	;x[0] = ref - smp
 			std	  Z+0, r22	;
 			dec	  r16		;
-			andi  r16, MASK ;
+			andi  r16, 0x03 ;
 			std	  Y+0, r16	;
 			inc	  r16		;
-			andi  r16, MASK ;
+			andi  r16, 0x03 ;
 			movw  r26,r24	;
 			adiw  r26,+4	;find the IIR filter coefficients
 			
@@ -47,7 +44,7 @@ PidControllerUpdate:
 			add	  r20, r19	; 
 			
 			inc	  r16
-			andi  r16, MASK	;
+			andi  r16, 0x03	;
 			movw  r30, r24  ;
 			add	  r30, r16	;
 			adc	  r31, r2	;
@@ -59,7 +56,7 @@ PidControllerUpdate:
 			add	  r20, r19	;
 
 			inc	  r16
-			andi  r16, MASK	;
+			andi  r16, 0x03	;
 			movw  r30, r24  ;
 			add	  r30, r16	;
 			adc	  r31, r2	;
@@ -76,7 +73,7 @@ PidControllerUpdate:
 			ldd	  r18, Z+0	;
 			sub   r20, r18	;
 			inc	  r17		;
-			andi  r17, MASK	; Update pid TF history.
+			andi  r17, 0x03	; Update pid TF history.
 			movw  r30, r24	;
 			adiw  r30, +7	;
 			add	  r30, r17	;

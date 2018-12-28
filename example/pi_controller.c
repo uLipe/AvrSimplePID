@@ -29,7 +29,7 @@ void main(void) {
                       &pi_coeff);
 
     while(1) {
-        delay_ms(2); //Simulate a plant running at 500Hz:
+        _delay_ms(2); //Simulate a plant running at 500Hz:
         //SECOND: Read sensor and compute next command:
         iq8_t command = PidControllerUpdate(&pi_controller, FLOAT_TO_Q8(1.0), StateEstimator());
         //THIRD: update actuator:
