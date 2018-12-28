@@ -20,7 +20,7 @@ AVR specialized math instructions.
  $ make all MCU=<mmcu> 
  ```
 - where mmcu is the ISA you want to compile supported by avr-gcc;  
-- on the build folder you'll find a .a file, include it on your project and enjoy;
+- on the build folder you'll find a .a file pĺus .h file, include it on your project and enjoy;
 
 # Support:
  - If you want some help with this work contact me: ryukokki.felipe@gmail.com
